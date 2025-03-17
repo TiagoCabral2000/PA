@@ -1,5 +1,7 @@
 package Ex13.model;
 
+import java.util.List;
+
 public interface ILibrary {
     String getName();
     void setName(String name);
