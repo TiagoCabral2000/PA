@@ -1,4 +1,4 @@
-package Ex13.ui.utils;
+package Ex13.ui;
 
 import java.util.Scanner;
 
@@ -61,7 +61,7 @@ public final class PAInput {
         }
     }
 
-    public static int chooseOption(String title, String ... options) { //... é numero variavel de parametros
+    public static int chooseOption(String title, String ... options) {
         int option = -1;
         do {
             if (title != null)
@@ -79,3 +79,4 @@ public final class PAInput {
     }
 
 }
+
