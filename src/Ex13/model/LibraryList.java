@@ -25,6 +25,8 @@ public class LibraryList implements ILibrary {
     @Override
     public int addBook(String title, List<String> authors){
         Book newBook = new Book(title, authors);
+        if (books.contains(newBook))
+            return -1;
         books.add(newBook);
         return newBook.getID();
     }
