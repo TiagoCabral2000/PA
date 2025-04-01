@@ -33,21 +33,48 @@ public class LibrarySet implements ILibrary{
 
     @Override
     public Book findBook(String title) throws CloneNotSupportedException {
+        Book newBook = new Book(title);
+        if (books.contains(newBook))
+            return newBook;
         return null;
+
+        /*
+        for (Book book:books){
+            if (book.getTitle().equalsIgnoreCase(title))
+                return book.clone();
+        }
+        return null;*/
     }
 
     @Override
     public Book findBook(int id) throws CloneNotSupportedException {
+        for (Book book:books){
+            if (book.getID() == id)
+                return book.clone();
+        }
         return null;
     }
 
     @Override
     public boolean removeBook(String title) {
-        return false;
+        return books.remove(new Book(title));
     }
 
     @Override
     public boolean removeBook(int id) {
+        for (Book book:books){
+            if (book.getID() == id)
+                return books.remove(book);
+        }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        str.append(String.format("Library %s:\n", name));
+        for (Book book:books)
+            str.append(book.toString() + "\n");
+        return str.toString();
     }
 }
