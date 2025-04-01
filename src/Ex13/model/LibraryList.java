@@ -1,25 +1,11 @@
 package Ex13.model;
 
-// -> This class represents a library which as a set of books
-// -> In addition to books, the library has a name
-// -> When an object of the LibraryList class is created, its name should be given
-// -> The LibraryList is created without book records
-// Methods:   - addBook() receives all the information to create a book
-//              record, creates the record, and adds it to the library
-//              It should return the id of the added book
-//            - findBook()  receives either the id or name of the book to find
-//              returns a reference to the book or null if no book is found
-//            - removeBook() receives either the id or name of the book to remove
-//              returns a boolean indicating the success of the operation
-//            - toString() returns a string with the library description (name and books)
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class LibraryList implements ILibrary{
-
-    private String name;
+public class LibraryList implements ILibrary {
     private List<Book> books;
+    private String name;
 
     public LibraryList(String name){
         this.name = name;
@@ -37,54 +23,54 @@ public class LibraryList implements ILibrary{
     }
 
     @Override
-    public int addBook(String title, List<String> authors) {
+    public int addBook(String title, List<String> authors){
         Book newBook = new Book(title, authors);
         if (books.contains(newBook))
             return -1;
-
         books.add(newBook);
         return newBook.getID();
     }
 
     @Override
-    public Book findBook(String title) throws CloneNotSupportedException {
-        Book dummyBook = new Book(title, List.of());
-        int index = books.indexOf(dummyBook);
-        if (index < 0)
-            return null;
-        return (Book) books.get(index).clone();
-    }
-
-    @Override
     public Book findBook(int id) throws CloneNotSupportedException {
-        for (Book book:books) {
+        for (Book book:books){
             if (book.getID() == id)
-                return (Book) book.clone();
+                return book.clone();
         }
         return null;
     }
 
     @Override
-    public boolean removeBook(String title) {
-        return books.remove(new Book(title, List.of()));
+    public Book findBook(String name) throws CloneNotSupportedException { //check equals method in Book class
+        Book tempBook = new Book(name, List.of());
+        int index = books.indexOf(tempBook);
+        if (index >= 0)
+            return books.get(index).clone();
+        return null;
     }
 
     @Override
-    public boolean removeBook(int id) {
-        for (Book book:books) {
-            if (book.getID() == id)
-                return books.remove(book);
+    public boolean removeBook(int id){
+        for (Book book: books){
+            if (book.getID() == id) {
+                books.remove(book);
+                return true;
+            }
         }
         return false;
     }
 
     @Override
-    public String toString() {
-        StringBuilder output = new StringBuilder();
-        output.append(String.format("Library: %s \n", name));
-        for (Book book:books)
-            output.append(String.format(" - %s\n", book));
+    public boolean removeBook(String name){
+        return books.remove(new Book(name, List.of()));
+    }
 
-        return output.toString();
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        str.append(String.format("Library %s:\n", name));
+        for (Book book:books)
+            str.append(book.toString() + "\n");
+        return str.toString();
     }
 }

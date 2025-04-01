@@ -1,82 +1,77 @@
 package Ex13.model;
 
-// -> Book class represents the concept of a book record in a library
-// -> It should be possible tothercreate objects of the Book class,
-//giving information about the title and authors
-// -> The book id must be generated automatically
-// -> The Book class should implement the following methods (from Object class):
-//      - toString() which returns a string with the object's description
-//      -  equals() twotherbooks are considered the same if they have the same name
-//      - hashCode() which returns the hash code of the object
-//      - clone() which generates a copy of the object
-
 import java.util.List;
 
-public class Book {
-    String title;
-    List<String> authors;
-    private final int id;
-    static int counter = 0;
+public class Book implements Cloneable{
+    private String title;
+    private List<String> authors;
+    private final int ID;
+    private static int count = 0;
 
     public Book(String title, List<String> authors){
         this.title = title;
         this.authors = authors;
-        id = ++counter;
+        this.ID = ++count;
     }
 
-    public String getTitle(){
-        return title;
+    //optional
+    public Book(String title, String... authors) {
+        this.ID = ++count;
+        this.title = title;
+        this.authors = List.of(authors);
     }
 
-    public boolean setTitle(String newTitle){
-        if (title == null)
-            return false;
-        title = newTitle;
-        return true;
-    }
-
-    public List<String> getAuthors(){
-        return List.copyOf(authors);
-    }
-
-    public int getID(){
-        return id;
-    }
-
-    public boolean setAuthors(List<String> authors){
-        if (authors == null)
-            return false;
-        this.authors = List.copyOf(authors);
-        return true;
+    @Override
+    public String toString() {
+        String strAuth = authors.toString(); //output: [auth1,auth2,auth3]
+        return String.format(
+                "[%d] %s - %s",
+                ID, title, strAuth.substring(1, strAuth.length() - 1)
+        );
     }
 
     @Override
     public boolean equals(Object other) {
         if (other == this)
             return true;
-        if (other== null || getClass() != other.getClass())
+        if (other == null || other.getClass() != getClass())
             return false;
 
-        Book book = (Book) other;
-        return title.equalsIgnoreCase(book.title);
+        Book o = (Book) other;
+        return title.equalsIgnoreCase(o.title);
     }
 
     @Override
-    public int hashCode() {
-        return title.toUpperCase().hashCode();
+    public int hashCode(){
+        return title != null ? title.toUpperCase().hashCode() : 0;
     }
 
     @Override
-    public String toString() {
-        String strAuthors = getAuthors().toString(); //Output = [author1, author2, ...]
-
-        return String.format("[%d] - %s - %s", id, title, strAuthors.substring(1, strAuthors.length()-1));
-    }
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
+    protected Book clone() throws CloneNotSupportedException {
         Book newBook = (Book) super.clone();
         newBook.authors = List.copyOf(authors);
         return newBook;
     }
+
+    //getters and setters
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public List<String> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(List<String> authors) {
+        this.authors = authors;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
 }

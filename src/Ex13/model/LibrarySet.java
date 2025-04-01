@@ -2,17 +2,16 @@ package Ex13.model;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class LibrarySet implements ILibrary{
-
+    private HashSet<Book> books;
     private String name;
-    private Set<Book> books;
 
     public LibrarySet(String name){
-        this.name = name;
         books = new HashSet<>();
+        this.name = name;
     }
+
 
     @Override
     public String getName() {
@@ -27,38 +26,43 @@ public class LibrarySet implements ILibrary{
     @Override
     public int addBook(String title, List<String> authors) {
         Book newBook = new Book(title, authors);
-        if (books.add(newBook))
-            return newBook.getID();
-
-        return -1;
+        if (!books.add(newBook))
+            return -1;
+        return newBook.getID();
     }
 
     @Override
     public Book findBook(String title) throws CloneNotSupportedException {
-        for (Book book:books){
-            if(book.getTitle().equalsIgnoreCase(title))
-                return (Book) book.clone();
-        }
+        Book newBook = new Book(title);
+        if (books.contains(newBook))
+            return newBook;
         return null;
+
+        /*
+        for (Book book:books){
+            if (book.getTitle().equalsIgnoreCase(title))
+                return book.clone();
+        }
+        return null;*/
     }
 
     @Override
     public Book findBook(int id) throws CloneNotSupportedException {
-        for (Book book:books) {
+        for (Book book:books){
             if (book.getID() == id)
-                return (Book) book.clone();
+                return book.clone();
         }
         return null;
     }
 
     @Override
     public boolean removeBook(String title) {
-        return books.remove(new Book(title, List.of()));
+        return books.remove(new Book(title));
     }
 
     @Override
     public boolean removeBook(int id) {
-        for (Book book:books) {
+        for (Book book:books){
             if (book.getID() == id)
                 return books.remove(book);
         }
@@ -67,12 +71,10 @@ public class LibrarySet implements ILibrary{
 
     @Override
     public String toString() {
-        StringBuilder output = new StringBuilder();
-        output.append(String.format("Library: %s \n", name));
+        StringBuilder str = new StringBuilder();
+        str.append(String.format("Library %s:\n", name));
         for (Book book:books)
-            output.append(String.format(" - %s\n", book));
-
-        return output.toString();
+            str.append(book.toString() + "\n");
+        return str.toString();
     }
 }
-
